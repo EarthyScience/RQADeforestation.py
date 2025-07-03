@@ -24,6 +24,47 @@ rqatrend(y, 0.5, 10, 1)
 # -0.12493604680482838
 ```
 
+Use in openEO:
+
+```python
+import openeo
+connection = openeo.connect("https://openeo.eodc.eu")
+
+cube_in = connection.load_collection(
+  "SENTINEL1_SIG0_20M",
+  spatial_extent={"west": 16.06, "south": 48.06, "east": 16.65, "north": 48.35},
+  temporal_extent=["2023-01-01", "2024-01-01"],
+  bands=["VV"]
+)
+
+rqatrend = openeo.UDF(
+"""
+# /// script
+# dependencies = [
+# "xarray",
+# "rqadeforestation @ git+https://github.com/EarthyScience/RQADeforestation.py",
+# ]
+# ///
+
+import xarray as xr
+from rqadeforestation import rqatrend
+
+def apply_datacube(cube: xr.DataArray, context: dict) -> xr.DataArray:
+    res_np = rqatrend(cube.to_numpy(), 0.5, 10, 1)
+    res_xr = xr.DataArray(res_np)
+    return res_xr
+"""
+)
+
+cube_out = cube_in.apply(process=rqatrend)
+result = cube_out.save_result("GTiff")
+
+connection.authenticate_oidc()
+job = result.create_job()
+job.start_and_wait()
+job.get_results().download_files("output")
+```
+
 ## Motivation
 
 Analyzing high resolution sattelite images at global scale requires to optimize the execution efficiency.
