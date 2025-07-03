@@ -32,7 +32,7 @@ connection = openeo.connect("https://openeo.eodc.eu")
 
 cube_in = connection.load_collection(
   "SENTINEL1_SIG0_20M",
-  spatial_extent={"west": 16.06, "south": 48.06, "east": 16.65, "north": 48.35},
+  spatial_extent={"west": 16.06, "south": 48.06, "east": 16.67, "north": 48.07},
   temporal_extent=["2023-01-01", "2024-01-01"],
   bands=["VV"]
 )
