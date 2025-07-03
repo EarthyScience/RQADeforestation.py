@@ -17,3 +17,12 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/EarthyScience/RQADeforestation.py"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+mypkg = ["*.so", "*.o"]
