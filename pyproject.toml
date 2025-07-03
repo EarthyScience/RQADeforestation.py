@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rqadeforestation"
+version = "0.1.0"
+description = "Python package for RQA trend calculation for deforestation analysis"
+authors = [
+    { name="Daniel Loos", email="dloos@bgc-jena.mpg.de" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy"
+]
+
+[project.urls]
+Homepage = "https://github.com/EarthyScience/RQADeforestation.py"
