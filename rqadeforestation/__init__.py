@@ -22,7 +22,7 @@ def mmptr(A):
     a = MallocMatrix(ptr, ct.c_int64(A.size), ct.c_int64(A.shape[1]), ct.c_int64(A.shape[0]))
     return ct.byref(a)
 
-filename = "RQADeforestation.jl/staticcompiler/lib/rqatrend.so"
+filename = "lib/rqatrend.so"
 lib = ct.CDLL(filename)
 
 def rqatrend(y: np.ndarray, threshold: float, border: int = 10, theiler: int = 1) -> float:

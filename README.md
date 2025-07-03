@@ -9,7 +9,7 @@ This library is part of the [FAIRSenDD project](https://github.com/EarthyScience
 Install:
 
 ```sh
-pip install rqadeforestation
+pip install git+https://github.com/EarthyScience/RQADeforestation.py
 ```
 
 Run RQA analysis on a single time series:
