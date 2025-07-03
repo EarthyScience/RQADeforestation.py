@@ -1,3 +1,4 @@
+import os
 import ctypes as ct
 import numpy as np
 
@@ -22,7 +23,8 @@ def mmptr(A):
     a = MallocMatrix(ptr, ct.c_int64(A.size), ct.c_int64(A.shape[1]), ct.c_int64(A.shape[0]))
     return ct.byref(a)
 
-filename = "lib/rqatrend.so"
+root_dir = os.path.dirname(os.path.abspath(__file__))
+filename = os.path.join(root_dir, "lib/rqatrend.so")
 lib = ct.CDLL(filename)
 
 def rqatrend(y: np.ndarray, threshold: float, border: int = 10, theiler: int = 1) -> float:
