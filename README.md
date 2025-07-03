@@ -31,6 +31,16 @@ Python is required for most openEO workflows in which performance critical parts
 Usually, this is done in C, e.g., array operations in numpy.
 Julia provides an alternative to accellerate code using a more user-friendly language.
 
+## Development
+
+Development workflow:
+
+1. Write Julia code at https://github.com/EarthyScience/RQADeforestation.jl
+1. Compile using [`StaticCompiler`](https://github.com/EarthyScience/RQADeforestation.jl/tree/main/staticcompiler)
+1. Put the binary libraries at [`rqadeforestation/lib`](rqadeforestation/lib)
+1. Add python binding functions to this package
+1. Install this package in openEO and use it in an [User-Defined-Function](https://open-eo.github.io/openeo-python-client/udf.html#declaration-of-udf-dependencies)
+
 ## Citation
 
 F. Cremer, M. Urbazaev, J. Cortés, J. Truckenbrodt, C. Schmullius and C. Thiel, "Potential of Recurrence Metrics from Sentinel-1 Time Series for Deforestation Mapping," in IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, vol. 13, pp. 5233-5240, 2020, doi: [10.1109/JSTARS.2020.3019333](https://dx.doi.org/10.1109/JSTARS.2020.3019333).
