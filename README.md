@@ -28,7 +28,7 @@ Use in openEO:
 
 ```python
 import openeo
-connection = openeo.connect("https://openeo.eodc.eu")
+connection = openeo.connect("https://openeo.cloud")
 
 cube_in = connection.load_collection(
   "SENTINEL1_SIG0_20M",
