@@ -19,9 +19,9 @@ from rqadeforestation import rqatrend
 import numpy as np
 
 x = np.arange(1, 30, step=0.01)
-y = np.sin(x) + 0.1 * x + np.random.rand(len(x))
+y = np.sin(x) + 0.1 * x
 rqatrend(y, 0.5, 10, 1)
-# -0.12493604680482838
+# -0.14028027430322332
 ```
 
 Use in openEO:
