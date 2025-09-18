@@ -27,42 +27,28 @@ rqatrend(y, 0.5, 10, 1)
 Use in openEO:
 
 ```python
+# Import required packages
 import openeo
-connection = openeo.connect("https://openeo.cloud")
+from openeo.processes import process
 
-cube_in = connection.load_collection(
-  "SENTINEL1_SIG0_20M",
-  spatial_extent={"west": 16.06, "south": 48.06, "east": 16.67, "north": 48.07},
-  temporal_extent=["2023-01-01", "2024-01-01"],
-  bands=["VV"]
-)
-
-rqatrend = openeo.UDF(
-"""
-# /// script
-# dependencies = [
-# "xarray",
-# "rqadeforestation @ git+https://github.com/EarthyScience/RQADeforestation.py",
-# ]
-# ///
-
-import xarray as xr
-from rqadeforestation import rqatrend
-
-def apply_datacube(cube: xr.DataArray, context: dict) -> xr.DataArray:
-    res_np = rqatrend(cube.to_numpy(), 0.5, 10, 1)
-    res_xr = xr.DataArray(res_np)
-    return res_xr
-"""
-)
-
-cube_out = cube_in.apply(process=rqatrend)
-result = cube_out.save_result("GTiff")
-
+# Connect to the back-end
+connection = openeo.connect("https://openeo.eodc.eu/openeo/1.2.0/")
 connection.authenticate_oidc()
-job = result.create_job()
-job.start_and_wait()
-job.get_results().download_files("output")
+
+bbox =  {"west": 11.655947222212369, "east": 11.715643117926051, "south": 50.87929082462556, "north": 50.92129080534822}
+datacube1 = connection.load_collection(collection_id = "SENTINEL1_SIG0_20M", spatial_extent = bbox,
+  temporal_extent = ["2020-01-01T00:00:00Z", "2021-01-01T00:00:00Z"], bands = None, properties = {}
+)
+
+def reducer1(data, context):
+    rqadeforestation1 = process("rqadeforestation", data = data, threshold = 0.4)
+    return rqadeforestation1
+
+reduce3 = datacube1.reduce_dimension(reducer = reducer1, dimension = "t")
+save4 = reduce3.save_result(format = "NETCDF")
+
+# The process can be executed synchronously (see below), as batch job or as web service now
+result = connection.execute(save4)
 ```
 
 ## Motivation
