@@ -37,7 +37,7 @@ connection.authenticate_oidc()
 
 bbox =  {"west": 11.655947222212369, "east": 11.715643117926051, "south": 50.87929082462556, "north": 50.92129080534822}
 datacube1 = connection.load_collection(collection_id = "SENTINEL1_SIG0_20M", spatial_extent = bbox,
-  temporal_extent = ["2020-01-01T00:00:00Z", "2021-01-01T00:00:00Z"], bands = None, properties = {}
+  temporal_extent = ["2020-01-01T00:00:00Z", "2020-02-01T00:00:00Z"], bands = None, properties = {}
 )
 
 def reducer1(data, context):
