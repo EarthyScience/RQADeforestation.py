@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rqadeforestation"
-version = "0.0.2"
 dynamic = ["version"]
 description = "Python package for RQA trend calculation for deforestation analysis"
 authors = [
