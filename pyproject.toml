@@ -15,7 +15,8 @@ readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
     "numpy",
-    "dask"
+    "dask", 
+    "xarray"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
