@@ -36,7 +36,6 @@ include-package-data = true
 "*" = ["*.so", "*.o"]
 
 [tool.setuptools_scm]
-version_scheme = "post-release"
 
 [dependency-groups]
 dev = [
