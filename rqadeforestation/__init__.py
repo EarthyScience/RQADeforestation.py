@@ -2,6 +2,7 @@ import os
 import ctypes as ct
 import numpy as np
 import dask.array as da
+import xarray as xr
 
 class MallocVector(ct.Structure):
     _fields_ = [("pointer", ct.c_void_p),
@@ -38,7 +39,7 @@ def rqatrend(y: np.ndarray, threshold: float, border: int = 10, theiler: int = 1
     :param theiler: Theiler window size for the RQA calculation.
     :return: The RQA trend value.
     """
-    py = mvptr(y)
+    py = mvptr(y.astype(np.float64))
     lib.rqatrend.argtypes = (ct.POINTER(MallocVector), ct.c_double, ct.c_int64, ct.c_int64)
     lib.rqatrend.restype = ct.c_double
     result_single = lib.rqatrend(py, threshold, border, theiler)
@@ -56,15 +57,30 @@ def rqatrend_matrix(matrix: np.ndarray, threshold: float, border: int = 10, thei
     :return: Numpy array of all RQA trend values of size n_timeseries.
     """
 
+    if not len(matrix.shape) == 2:
+        raise Exception("Input to rqatrend_matrix must be 2d") 
+
     n = matrix.shape[0]
     result_several = np.ones(n)
     p_result_several = mvptr(result_several)
-    p_matrix = mmptr(matrix)
-    
+    p_matrix = mmptr(matrix.astype(np.float64))
     # arguments: result_vector, data, threshhold, border, theiler
     lib.rqatrend_inplace.argtypes = (ct.POINTER(MallocVector), ct.POINTER(MallocMatrix), ct.c_double, ct.c_int64, ct.c_int64)
     return_value = lib.rqatrend_inplace(p_result_several, p_matrix, threshold, border, theiler)
     return result_several
+
+def rqatrend_xarray(x, threshold:float, border: int = 10, 
+                    theiler: int=1, out_dtype = np.float64,
+                    timeaxis_name = "time"):
+    return xr.apply_ufunc(
+        rqatrend,
+        x.chunk({timeaxis_name: -1}),
+        kwargs = {'threshold': threshold,'border':border,'theiler':theiler},
+        input_core_dims = [[timeaxis_name]],
+        output_core_dims = [[]],
+        dask = "parallelized",
+        vectorize=True,
+    )
 
 
 def rqatrend_dask(x: da.Array, timeseries_axis: int, threshold: float, border: int = 10, theiler: int = 1, out_dtype: type = np.float64) -> da.Array:
